@@ -1,3 +1,4 @@
+
 <?php
 
 use Illuminate\Database\Migrations\Migration;
@@ -18,8 +19,7 @@ return new class extends Migration
             $table->string('phone')->nullable();
             $table->string('avatar')->nullable();
             $table->string('student_id')->nullable();
-            $table->string('password');
-            
+            $table->string('password');  // <-- Added password field
             $table->timestamps();
         });
     }
