@@ -13,20 +13,22 @@ return new class extends Migration
     {
         Schema::create('personal_details', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id'); // Correct type
+            $table->unsignedBigInteger('user_id');
             $table->text('description')->nullable();
             $table->string('blood_group')->nullable();
             $table->string('department')->nullable();
             $table->integer('age')->nullable();
             $table->date('dob')->nullable();
-            $table->text('address')->nullable();
-            $table->string('gender')->nullable();
+            $table->string('address')->nullable();
+            $table->enum('gender', ['male', 'female', 'other'])->nullable();
             $table->timestamps();
+        });
 
-            // Foreign key definition inside the closure
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+        Schema::table('personal_details', function (Blueprint $table) {
+        $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
+    
 
     /**
      * Reverse the migrations.
