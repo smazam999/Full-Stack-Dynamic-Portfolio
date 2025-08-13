@@ -1,32 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
 use App\Http\Controllers\AuthenticationController;
-use App\Http\Controllers\Dashboardcontroller;
+use App\Http\Controllers\DashboardController;
 
-// login routes
-Route::get('/login', function () {
-    return view('auth.login');
-});
-
-Route::post('/login', [AuthenticationController::class, 'login'])->name('login');
-////register
-Route::get('/register', function () {
-    return view('auth.register');
-});
-
-Route::post('/register', [AuthenticationController::class, 'register'])->name('register');
-
+// Public Routes
 Route::get('/', function () {
     return view('welcome');
 });
@@ -35,17 +13,25 @@ Route::get('/lp1', function () {
     return view('lp1');
 });
 
-Route::get('/register', function () {
-    return view('auth.register');
+// Authentication Routes
+Route::middleware('guest')->group(function () {
+    Route::get('/login', function () {
+        return view('auth.login');
+    })->name('login');
+
+    Route::post('/login', [AuthenticationController::class, 'login']);
+    
+    Route::get('/register', function () {
+        return view('auth.register');
+    })->name('register');
+    
+    Route::post('/register', [AuthenticationController::class, 'register']);
 });
 
-Route::post('/register', [AuthenticationController::class, 'register'])->name('register');
-
-
-Route::get('/dashbord', function () {
-    return view('admin.dashbord');
-});
-
+// Protected Routes
 Route::middleware(['auth'])->group(function () {
-    Route::get('/admin/dashbord', [Dashbordcontroller::class, 'index'])->name('dashbord');
+    Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::post('/admin/profile/update', [DashboardController::class, 'updateProfile'])->name('profile.update');
+    
+    Route::post('/logout', [AuthenticationController::class, 'logout'])->name('logout');
 });
